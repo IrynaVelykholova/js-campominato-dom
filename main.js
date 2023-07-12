@@ -51,6 +51,7 @@ function creoGriglia(numeroQuadrati) {
 }
 
 // creo funzione che stampa la griglia che sarà composta da 2 elementi: container e i quadrati
+// il container è il "foglio" e la listaQ sono i quadrati che verranno stampati dentro
 function stampaGriglia(container, listaQuadrati) {
     // reset del contenuto del container per evitare che ci siano altri div creati precedentemente
     container.innerHTML = "";
@@ -60,6 +61,68 @@ function stampaGriglia(container, listaQuadrati) {
     }
 }
 
+function numeroRandom(valoreMax) { 
+    let numeri=[];   
+
+    while (numeri.length < 16){
+        const random = Math.floor(Math.random() * valoreMax) + 1;
+
+        if (numeri.indexOf(random) === -1){ 
+            numeri.push(random);
+        }
+    }
+    console.log("numeri esplosivi: " + numeri)
+    return numeri;
+}
 
 
+
+
+const gridCContainer = document.querySelector(".grid-ccontainer");
+const playingUserEl = document.querySelector(".playing-user");
+let userPlaying = 1; //tiene traccia dell'utente a cui tocca giocare
+
+for (let i = 0; i < 9; i++) {
+    const square = document.createElement("div"); //creo div
+    square.classList.add("grid-ssquare"); //aggiungo classe
+    //square.innerHTML = i + 1;
+    square.dataset.indice = i + 1;//creo nuovo attributo sull'elemento chiamato indice
+
+    square.addEventListener("click", onSquareClick) //invoco la mia funzione click
+    gridCContainer.append(square); //aggiungo nel mio container i quadrati
+}
+
+updatePlayingUser(false);//fa apparire nel h3 il turno dell'utente
+
+
+function onSquareClick () {
+    console.log(this); //se clikko il quadrato mi esce il mio div (quindi rappresenta il quadrato)
+
+    if (this.dataset.user !== undefined) { //se datauser ha già un valore significa che è già stato cliccato
+        return;//quindi non può essere cliccato
+    }
+
+    this.classList.add("bg-success")//this in questo caso è il mio square (guardare ciclo for sopra)
+    this.dataset.user = userPlaying;//ci dice c
+
+    if(userPlaying === 1) { //se user che gioca è true allora
+        this.innerHTML = "X"; //aggiunge una X
+        this.classList.add("bg-danger")
+    } else {
+        this.innerHTML = "O";
+    }
+updatePlayingUser(true); //invoco la funzione del cambio giocatore
+}
+
+function updatePlayingUser (changePlayer) {//booleano
+    if (changePlayer) {
+        if(userPlaying === 1) { //se user che gioca è true allora
+            userPlaying = 2;    //passo turno al secondo giocatore
+        } else {
+            userPlaying = 1; //passo turno al primo giocatore
+        }
+    }
+    
+playingUserEl.innerHTML = "Turno dell'utente" + userPlaying; 
+}
 

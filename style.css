@@ -19,3 +19,19 @@
     align-items: center;
     justify-content: center;
 }
+
+.grid-ccontainer {
+    display: flex;
+    border: 1px solid black;
+    flex-wrap: wrap;
+    aspect-ratio: 1/1;
+}
+
+.grid-ssquare {
+    aspect-ratio: 1/1;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 33.3%;
+}
