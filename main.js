@@ -34,7 +34,6 @@ function creoQuadrato(contenutoQuadrato, quadratiDaCreare) {
     const quadratiPerRiga = Math.sqrt(quadratiDaCreare);
     quadrato.style.flexBasis = `calc(100% / ${quadratiPerRiga})`
 
-    createBomb(valoreSelect);
 
     quadrato.addEventListener("click", function () {
         quadrato.classList.add("bg-info");
@@ -79,10 +78,12 @@ function createBomb(bomb) {
 
     for (let i = 1; i <= 16; i++){
     const random = Math.floor(Math.random() * bomb) + 1;
-
-    numeri.push(random);
-        
+    if (numeri.indexOf(random) === -1){ 
+        numeri.push(random);
     }
+    }
+    
+
     console.log("i 16 numeri dell'array" + numeri)
     return numeri;
 }
