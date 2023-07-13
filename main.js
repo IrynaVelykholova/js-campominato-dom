@@ -4,13 +4,17 @@ const selezionaQuadrati = document.getElementById("seleziona-quadrati");
 const btnPlay = document.getElementById("btn-play");
 const gridContainer = document.querySelector(".grid-container");
 
+
 //creo funzione del click sul bottone
 btnPlay.addEventListener("click", function () {
     // Leggo il valore della select
     // creo costante per leggere il valore 
     // siccome il valore in questo caso è una stringa, allora lo converso in numero con parseInt
-    const valoreSelect = parseInt(selezionaQuadrati.value); 
+    let valoreSelect = parseInt(selezionaQuadrati.value); 
     console.log("valore scelto", valoreSelect);
+
+    //richiamo funzione bomba
+    createBomb(valoreSelect);
 
     //richiamo la mia funzione creoGriglia e inserisco come valore la mia constante che ha il value
     const grigliaLista = creoGriglia(valoreSelect); 
@@ -26,10 +30,18 @@ function creoQuadrato(contenutoQuadrato, quadratiDaCreare) {
     quadrato.classList.add("grid-square"); //aggiungo la classe (con le sue caratteristiche in css)
     quadrato.innerHTML = contenutoQuadrato; //inserisco in html il contenuto del quadrato
 
+    
     const quadratiPerRiga = Math.sqrt(quadratiDaCreare);
     quadrato.style.flexBasis = `calc(100% / ${quadratiPerRiga})`
+
+    createBomb(valoreSelect);
+
     quadrato.addEventListener("click", function () {
         quadrato.classList.add("bg-info");
+        if (quadrato.includes(bomb)) { //bomb non è definito (come richiamo la funzione della bomba?)
+            quadrato.classList.add("bg-success");
+            quadrato.innerHTML = "HAI CLICCATO UN BOMBA"
+        }
     })
 
     return quadrato;
@@ -61,20 +73,21 @@ function stampaGriglia(container, listaQuadrati) {
     }
 }
 
-function numeroRandom() { 
+//creo array di 16 numeri come bombe
+function createBomb(bomb) { 
     let numeri=[];   
 
-    for (let i = 0; i <= 16; i++){
-    const random = Math.floor(Math.random() * 16) + 1;
+    for (let i = 1; i <= 16; i++){
+    const random = Math.floor(Math.random() * bomb) + 1;
 
     numeri.push(random);
         
     }
-    console.log(numeri)
+    console.log("i 16 numeri dell'array" + numeri)
     return numeri;
 }
 
-
+///////////// esercizio della mattina
 
 
 const gridCContainer = document.querySelector(".grid-ccontainer");
