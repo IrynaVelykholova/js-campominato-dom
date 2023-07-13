@@ -3,10 +3,14 @@
 const selezionaQuadrati = document.getElementById("seleziona-quadrati");
 const btnPlay = document.getElementById("btn-play");
 const gridContainer = document.querySelector(".grid-container");
+let bomb = [];
+let contatore = 0;
+let giocabile= true;
 
 
 //creo funzione del click sul bottone
 btnPlay.addEventListener("click", function () {
+    giocabile= true;
     // Leggo il valore della select
     // creo costante per leggere il valore 
     // siccome il valore in questo caso è una stringa, allora lo converso in numero con parseInt
@@ -14,7 +18,9 @@ btnPlay.addEventListener("click", function () {
     console.log("valore scelto", valoreSelect);
 
     //richiamo funzione bomba
-    createBomb(valoreSelect);
+    bomb = createBomb(valoreSelect);
+    console.log(bomb);
+    
 
     //richiamo la mia funzione creoGriglia e inserisco come valore la mia constante che ha il value
     const grigliaLista = creoGriglia(valoreSelect); 
@@ -34,15 +40,8 @@ function creoQuadrato(contenutoQuadrato, quadratiDaCreare) {
     const quadratiPerRiga = Math.sqrt(quadratiDaCreare);
     quadrato.style.flexBasis = `calc(100% / ${quadratiPerRiga})`
 
-
-    quadrato.addEventListener("click", function () {
-        quadrato.classList.add("bg-info");
-        if (quadrato.includes(bomb)) { //bomb non è definito (come richiamo la funzione della bomba?)
-            quadrato.classList.add("bg-success");
-            quadrato.innerHTML = "HAI CLICCATO UN BOMBA"
-        }
-    })
-
+    
+    quadrato.addEventListener("click", casellaCliccabile);
     return quadrato;
 }
 
@@ -55,7 +54,7 @@ function creoGriglia(numeroQuadrati) {
         const nuovoQuadrato = creoQuadrato(i + 1, numeroQuadrati); //riprendo la funzione del singolo quadrato e aggiungo numero quadrati dentro per 
         //dentro la griglia inserisco il quadrato
         griglia.push(nuovoQuadrato);
-
+        nuovoQuadrato.dataset.casella = i + 1;
     }
     return griglia;
     //vado riga 16 e richiamo la mia funzione nel click del btn
@@ -73,20 +72,46 @@ function stampaGriglia(container, listaQuadrati) {
 }
 
 //creo array di 16 numeri come bombe
-function createBomb(bomb) { 
-    let numeri=[];   
+function createBomb(num) { 
+    let listaBombe=[];   
 
     for (let i = 1; i <= 16; i++){
-    const random = Math.floor(Math.random() * bomb) + 1;
-    if (numeri.indexOf(random) === -1){ 
-        numeri.push(random);
+    const random = Math.floor(Math.random() * num) + 1;
+    if (listaBombe.indexOf(random) === -1){ 
+        listaBombe.push(random);
     }
     }
-    
-
-    console.log("i 16 numeri dell'array" + numeri)
-    return numeri;
+    console.log("i 16 numeri dell'array" + listaBombe)
+    return listaBombe;
 }
+
+//funzione casella cliccabile
+function casellaCliccabile ()  {
+    contatore += 1;
+    if (giocabile == false) {
+        return
+    } 
+    const scelta = (this.dataset.casella);
+    console.log(scelta)
+
+    for(let i= 1; i <= bomb.length; i++) {
+        //confronto caselle con le bombe
+        if (bomb[i] == scelta) {
+            this.classList.add("bg-danger");
+            this.innerHTML = `<i class="fa-solid fa-heart"></i>`
+            giocabile = false;
+            console.log("Sei Morto dopo " + contatore +" turni!");
+        
+            return
+        }
+        else { 
+            this.classList.add("bg-success");
+            this.innerHTML = `<i class="fa-solid fa-bomb"></i>`;
+        }
+    }
+}
+
+
 
 ///////////// esercizio della mattina
 
@@ -138,4 +163,3 @@ function updatePlayingUser (changePlayer) {//booleano
     
 playingUserEl.innerHTML = "Turno dell'utente" + userPlaying; 
 }
-
