@@ -61,17 +61,16 @@ function stampaGriglia(container, listaQuadrati) {
     }
 }
 
-function numeroRandom(valoreMax) { 
+function numeroRandom() { 
     let numeri=[];   
 
-    while (numeri.length < 16){
-        const random = Math.floor(Math.random() * valoreMax) + 1;
+    for (let i = 0; i <= 16; i++){
+    const random = Math.floor(Math.random() * 16) + 1;
 
-        if (numeri.indexOf(random) === -1){ 
-            numeri.push(random);
-        }
+    numeri.push(random);
+        
     }
-    console.log("numeri esplosivi: " + numeri)
+    console.log(numeri)
     return numeri;
 }
 
